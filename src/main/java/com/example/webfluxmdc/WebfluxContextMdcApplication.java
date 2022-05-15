@@ -12,6 +12,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.context.Context;
 
+import java.time.Duration;
+
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 
 @SpringBootApplication
@@ -30,7 +32,17 @@ public class WebfluxContextMdcApplication {
                 .route(GET("/test"), serverRequest -> {
                     log.info("log in start");
 
-                    Flux<String> flux = Flux.just("test")
+                    Flux<String> flux = Flux.just("test","test1","test2","test3","test10","test11","test22","test9"
+                            ,"test","test1","test2","test3","test10","test11","test22","test9"
+                            ,"test","test1","test2","test3","test10","test11","test22","test9",
+                                    "test","test1","test2","test3","test10","test11","test22","test9"
+                            ,"test","test1","test2","test3","test10","test11","test22","test9"
+                            ,"test","test1","test2","test3","test10","test11","test22","test9"
+                            ,"test","test1","test2","test3","test10","test11","test22","test9"
+                            ,"test","test1","test2","test3","test10","test11","test22","test9"
+                            ,"test","test1","test2","test3","test10","test11","test22","test9"
+                            ,"test","test1","test2","test3","test10","test11","test22","test9")
+                            .delayElements(Duration.ofMillis(10))
                             .doOnNext(s -> log.info("log in doOnNext"))
                             .map(s -> {
                                 log.info("log in map");
@@ -43,8 +55,8 @@ public class WebfluxContextMdcApplication {
                                     log.info("log in subscriberContext");
                                     return s + " " + c.getOrDefault("context", "no_data");
                                 });
-                            })
-                            .subscriberContext(Context.of("context", "context_data "+ System.currentTimeMillis()));
+                            });
+//                            .subscriberContext(Context.of("context", "context_data "+ System.currentTimeMillis()));
 
                     log.info("log in end");
 

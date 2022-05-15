@@ -5,6 +5,7 @@ import org.slf4j.MDC;
 import reactor.core.CoreSubscriber;
 import reactor.util.context.Context;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -53,10 +54,10 @@ class MdcContextLifter<T> implements CoreSubscriber<T> {
     private void copyToMdc(Context context) {
 
         if (!context.isEmpty()) {
-            Map<String, String> map = context.stream()
-                    .collect(Collectors.toMap(e -> e.getKey().toString(), e -> e.getValue().toString()));
-
-            MDC.setContextMap(map);
+            if(context.getOrEmpty(LoggingFilterWebFilter.SURAJ_LOGGING_CONTEXT).isPresent()){
+                HashMap<String, String> mdcMap = (HashMap<String, String>) context.get(LoggingFilterWebFilter.SURAJ_LOGGING_CONTEXT);
+                MDC.setContextMap(mdcMap);
+            }
         } else {
             MDC.clear();
         }
