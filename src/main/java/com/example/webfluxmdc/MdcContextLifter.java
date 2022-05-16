@@ -1,19 +1,25 @@
 package com.example.webfluxmdc;
 
+import brave.baggage.BaggageField;
+import brave.propagation.ExtraFieldPropagation;
+import brave.propagation.Propagation;
 import org.reactivestreams.Subscription;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import reactor.core.CoreSubscriber;
 import reactor.util.context.Context;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Helper that copies the state of Reactor [Context] to MDC on the #onNext function.
  */
 class MdcContextLifter<T> implements CoreSubscriber<T> {
+
+    @Autowired
+            private Propagation propagation;
 
     CoreSubscriber<T> coreSubscriber;
 
@@ -23,6 +29,8 @@ class MdcContextLifter<T> implements CoreSubscriber<T> {
 
     @Override
     public void onSubscribe(Subscription subscription) {
+//        ExtraFieldPropagation.set("principal", UUID.randomUUID().toString());
+//        ExtraFieldPropagation.set("suraj", UUID.randomUUID().toString());
         coreSubscriber.onSubscribe(subscription);
     }
 
@@ -73,7 +81,8 @@ class MdcContextLifter<T> implements CoreSubscriber<T> {
                         }
                     });
                 }
-
+                Map<String, String> copyOfContextMap = MDC.getCopyOfContextMap();
+                copyOfContextMap.forEach((p,k)->mdcMap.put(p,k));
                 MDC.setContextMap(mdcMap);
             }
         } else {

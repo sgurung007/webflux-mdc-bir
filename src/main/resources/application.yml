@@ -1,2 +1,11 @@
 chassis:
     logging: customkey1,customkey2,customkey3
+#logging:
+#  level:
+#    org.springframework.cloud.sleuth: DEBUG
+spring:
+  sleuth:
+    log:
+      slf4j:
+        whitelisted-mdc-keys: principal,suraj
+    baggage-keys: principal,suraj
