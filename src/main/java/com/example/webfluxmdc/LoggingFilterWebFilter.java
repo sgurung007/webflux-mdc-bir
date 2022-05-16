@@ -32,7 +32,6 @@ public class LoggingFilterWebFilter implements WebFilter {
 
 
         loggingSreMap.put("context", "context_data "+ System.currentTimeMillis());
-        loggingSreMap.put("customkey1", "surajGURUNG ");
 
         for (int i=0; i< getCustomLogging().length;i++){
             loggingCustomMap.put(i,getCustomLogging()[i]);
@@ -46,12 +45,6 @@ public class LoggingFilterWebFilter implements WebFilter {
 
 //        updateMainThreadMdc(loggingMap);
         return webFilterChain.filter(serverWebExchange).contextWrite(Context.of(SURAJ_LOGGING_CONTEXT,loggingMap));
-    }
-
-    private void updateMainThreadMdc(Map<String, Object> loggingMap) {
-        HashMap<String, Object> loggingHashMap = (HashMap<String, Object>) loggingMap.get(LoggingFilterWebFilter.SURAJ_LOGGING_CONTEXT);
-        MDC.put("customkey1","surajGURUNG");
-
     }
 
     public String[] getCustomLogging(){

@@ -69,7 +69,7 @@ class MdcContextLifter<T> implements CoreSubscriber<T> {
                     HashMap<Integer, String> customHashMap = (HashMap<Integer, String>) mdcMapObject.get(LoggingFilterWebFilter.SURAJ_CUSTOM_LOGGING_CONTEXT);
                     customHashMap.forEach((i,v)->{
                         if(context.getOrEmpty(v).isPresent()){
-                            mdcMap.put(v,context.get(v));
+                            mdcMap.put(v,v.toString()+": "+context.get(v));
                         }
                     });
                 }
