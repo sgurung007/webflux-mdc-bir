@@ -1,5 +1,7 @@
 package com.example.webfluxmdc;
 
+import brave.baggage.BaggageField;
+import brave.baggage.BaggagePropagation;
 import brave.internal.extra.ExtraFactory;
 import brave.propagation.ExtraFieldPropagation;
 import org.slf4j.Logger;

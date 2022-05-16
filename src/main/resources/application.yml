@@ -3,9 +3,9 @@ chassis:
 #logging:
 #  level:
 #    org.springframework.cloud.sleuth: DEBUG
-spring:
-  sleuth:
-    log:
-      slf4j:
-        whitelisted-mdc-keys: principal,suraj
-    baggage-keys: principal,suraj
+#spring:
+#  sleuth:
+#    log:
+#      slf4j:
+#        whitelisted-mdc-keys: principal,suraj
+#    baggage-keys: principal,suraj
