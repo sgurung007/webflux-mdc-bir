@@ -2,12 +2,13 @@ package com.example.webfluxmdc;
 
 import org.reactivestreams.Subscription;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import reactor.core.CoreSubscriber;
 import reactor.util.context.Context;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Helper that copies the state of Reactor [Context] to MDC on the #onNext function.
@@ -54,8 +55,25 @@ class MdcContextLifter<T> implements CoreSubscriber<T> {
     private void copyToMdc(Context context) {
 
         if (!context.isEmpty()) {
+            Map<String,String> mdcMap=new HashMap<>();
+
             if(context.getOrEmpty(LoggingFilterWebFilter.SURAJ_LOGGING_CONTEXT).isPresent()){
-                HashMap<String, String> mdcMap = (HashMap<String, String>) context.get(LoggingFilterWebFilter.SURAJ_LOGGING_CONTEXT);
+                HashMap<String, Object> mdcMapObject
+                        = (HashMap<String, Object>) context.get(LoggingFilterWebFilter.SURAJ_LOGGING_CONTEXT);
+                if(mdcMapObject.containsKey(LoggingFilterWebFilter.SURAJ_SRE_LOGGING_CONTEXT)){
+                    HashMap<String, String> sreHashMap = (HashMap<String, String>) mdcMapObject.get(LoggingFilterWebFilter.SURAJ_SRE_LOGGING_CONTEXT);
+                    sreHashMap.forEach((p,k)->mdcMap.put(p,k));
+                }
+
+                if(mdcMapObject.containsKey(LoggingFilterWebFilter.SURAJ_CUSTOM_LOGGING_CONTEXT)){
+                    HashMap<Integer, String> customHashMap = (HashMap<Integer, String>) mdcMapObject.get(LoggingFilterWebFilter.SURAJ_CUSTOM_LOGGING_CONTEXT);
+                    customHashMap.forEach((i,v)->{
+                        if(context.getOrEmpty(v).isPresent()){
+                            mdcMap.put(v,context.get(v));
+                        }
+                    });
+                }
+
                 MDC.setContextMap(mdcMap);
             }
         } else {

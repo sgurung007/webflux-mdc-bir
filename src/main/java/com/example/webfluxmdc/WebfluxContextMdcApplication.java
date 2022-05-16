@@ -44,6 +44,7 @@ public class WebfluxContextMdcApplication {
                             ,"test","test1","test2","test3","test10","test11","test22","test9")
                             .delayElements(Duration.ofMillis(10))
                             .doOnNext(s -> log.info("log in doOnNext"))
+                            .doOnEach(s->log.info("log in doOnEach"))
                             .map(s -> {
                                 log.info("log in map");
                                 return s;
@@ -55,10 +56,12 @@ public class WebfluxContextMdcApplication {
                                     log.info("log in subscriberContext");
                                     return s + " " + c.getOrDefault("context", "no_data");
                                 });
-                            });
+                            }).contextWrite(Context.of("customkey1","custmoValue1","customkey2","customValue2","customkey3","customValue3"));
 //                            .subscriberContext(Context.of("context", "context_data "+ System.currentTimeMillis()));
 
                     log.info("log in end");
+
+
 
                     return ServerResponse
                             .ok()
