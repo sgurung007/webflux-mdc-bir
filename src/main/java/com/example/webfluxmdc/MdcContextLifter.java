@@ -65,6 +65,9 @@ class MdcContextLifter<T> implements CoreSubscriber<T> {
         if (!context.isEmpty()) {
             Map<String,String> mdcMap=new HashMap<>();
 
+            Map<String, String> copyOfContextMap = MDC.getCopyOfContextMap();
+            copyOfContextMap.forEach((p,k)->mdcMap.put(p,k));
+
             if(context.getOrEmpty(LoggingFilterWebFilter.SURAJ_LOGGING_CONTEXT).isPresent()){
                 HashMap<String, Object> mdcMapObject
                         = (HashMap<String, Object>) context.get(LoggingFilterWebFilter.SURAJ_LOGGING_CONTEXT);
@@ -81,8 +84,7 @@ class MdcContextLifter<T> implements CoreSubscriber<T> {
                         }
                     });
                 }
-                Map<String, String> copyOfContextMap = MDC.getCopyOfContextMap();
-                copyOfContextMap.forEach((p,k)->mdcMap.put(p,k));
+
                 MDC.setContextMap(mdcMap);
             }
         } else {
