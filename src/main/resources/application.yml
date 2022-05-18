@@ -9,3 +9,26 @@ chassis:
 #      slf4j:
 #        whitelisted-mdc-keys: principal,suraj
 #    baggage-keys: principal,suraj
+
+cloud:
+    aws:
+        credentials:
+            profile-name: default
+        region:
+            auto: true
+
+spring:
+    application:
+        name: webflux-mdc
+    cloud:
+        stream:
+            bindings:
+                produceOrder-out-0:
+                    destination: suraj-kinesis-1
+                    content-type: application/json
+                    producer:
+                        partitionKeyExpression: "1"
+        function:
+            definition: produceOrder
+
+originator: aws-kinesis-producer-service

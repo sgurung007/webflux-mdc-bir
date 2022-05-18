@@ -31,4 +31,5 @@ public class HeroController {
         log.info("after flux!!");
         return new ResponseEntity<>(stringFlux, HttpStatus.OK);
     }
+
 }
